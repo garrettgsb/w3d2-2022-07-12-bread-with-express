@@ -43,7 +43,7 @@
   * Gram - Post, but it's an image
   * Classified ad - Post, specifically for buying/selling/dating/etc. something
   * Tweet - Post, but 280 characters (or something)
-  * Article, message, etc.: Many things map onto this "post" concept straightforwardly
+  * Article, message, recipe, etc.: Many things map onto this "post" concept straightforwardly
 
   ### REST: Doing BREAD stuff to resources
 

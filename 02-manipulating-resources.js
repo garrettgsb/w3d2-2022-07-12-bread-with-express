@@ -486,3 +486,55 @@ function deleteAuthor(id) {
   const authorIdx = authors.indexOf(author);
   authors.splice(authorIdx, 1);
 }
+
+
+/*
+
+GET /blogs                -> Just render the blogs array
+GET /blogs/:id            -> getBlogById()
+POST /blogs               -> addBlog()
+POST /blogs/:id           -> editBlog()
+POST /blogs/:id/delete    -> deleteBlog()
+
+GET /authors              -> Just render the authors array
+GET /authors/:id          -> getAuthorById() (Might also involve getBlogsForAuthor())
+POST /authors             -> addAuthor()
+POST /authors/:id         -> editAuthor()
+POST /authors/:id/delete  -> deleteAuthor()
+
+Bonus:
+
+GET /authors/:id/blogs    -> getBlogsForAuthor()
+
+*/
+
+const express = require('express');
+const app = express();
+app.use(express.urlencoded({ extended: true }));
+
+app.get('/blogs', (request, response) => {
+  console.log(blogs.map(blog => ({ id: blog.id, title: blog.title })));
+  response.send(`
+  <ul>
+    ${blogs.map(blog => {
+      return `<li><a href='/blogs/${blog.id}>${blog.title}</a></li>`
+    }).join('')}
+  </ul>
+
+  <form method='POST' action='/blogs'>
+    <input name='title' placeholder='Title'>
+    <input name='body' placeholder='body'>
+    <label for='authorName'>Author Name</label>
+    <input name='authorName'>
+    <button>Submit</button>
+  </form>
+  `);
+});
+
+app.post('/blogs', (request, response) => {
+  const { title, body, authorName } = request.body;
+  addBlog(authorName, title, body);
+  response.redirect('/blogs');
+});
+
+app.listen(8080, () => console.log('Listening on 8080'));

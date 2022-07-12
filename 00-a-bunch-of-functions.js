@@ -11,8 +11,13 @@ function reset() { setTo(0); }
 
 // Mapping between Javascript functions and command line interface
 {
+  // The interface for this application (i.e. Commands that a user can run to interact with it):
+  // node 00-a-bunch-of-functions.js increment
+  // node 00-a-bunch-of-functions.js decrement
+  // node 00-a-bunch-of-functions.js set 50
+  // node 00-a-bunch-of-functions.js reset
+  // node 00-a-bunch-of-functions.js
   const [_interpreter, _file, operation, value] = process.argv;
-  console.log('Args:', process.argv);
   if (operation === 'increment') { increment(); console.log(`After ${operation}: ${readCounter()}`)}
   else if (operation === 'decrement') { decrement(); console.log(`After ${operation}: ${readCounter()}`)}
   else if (operation === 'set') { setTo(value); console.log(`After ${operation}: ${readCounter()}`)}
@@ -39,6 +44,10 @@ function reset() { setTo(0); }
     </form>
   `)});
 
+  // You _could_ just send a response, like below, instead of redirecting...
+  // But we prefer to separate "requests to do something" from "requests to see something"
+  // So the plan in this app is just to always redirect to home ('/') after taking an action.
+  // app.get('/increment', (request, response) => { increment(); response.send("Request to increment was successful! Current count is: " + readCounter() + "<a href='/'>Back</a>") });
   app.get('/increment', (request, response) => { increment(); response.redirect('/') });
   app.get('/decrement', (request, response) => { decrement(); response.redirect('/') });
   app.get('/reset', (request, response) => { reset(); response.redirect('/') });
@@ -48,5 +57,5 @@ function reset() { setTo(0); }
     response.redirect('/')
   });
 
-  // app.listen(8080, () => { console.log(`Listening on ${PORT}!`)});
+  app.listen(8080, () => { console.log(`Listening on ${PORT}!`)});
 }
